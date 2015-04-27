@@ -58,7 +58,7 @@ namespace FeedScanning {
             ReportProgress(0);
             List<FeedItem> newItems = new List<FeedItem>();
             using (WebClient webClient = new WebClient()) {
-                for (int page = 0; page < (int)e.Argument; page++) {
+                for (int page = 1; page <= (int)e.Argument; page++) {
                     using (StreamXmlSanitizer streamXmlSanitizer = new StreamXmlSanitizer(webClient.OpenRead(FEED_URL + page))) {
                         foreach (var entry in SyndicationFeed.Load(XmlReader.Create((TextReader)streamXmlSanitizer, new XmlReaderSettings() { ProhibitDtd = false, CheckCharacters = true })).Items.OrderByDescending(x => x.PublishDate)) {
                             if (CancellationPending) {
