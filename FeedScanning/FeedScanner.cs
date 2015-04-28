@@ -16,7 +16,8 @@ namespace FeedScanning {
         public const string FEED_HISTORY = "FeedHistory.xml";
         public const string FAVORITE_SHOWS = "FavoriteShows.xml";
         public const int MAX_PAGES = 15;
-        public const string FEED_URL = "http://www.rlsbb.com/category/tv-shows/feed/?paged=";
+        public const string REGEX_PATTERN = @"(http|ftp|https):\/\/([uploaded|ul]+(?:(?:\.[\w\-_]+)+))([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?";
+        public const string FEED_URL = "http://www.rlsbb.com/category/tv-shows/feed/atom/?paged=";
 
         public List<FeedItem> FeedEntries { get; set; }
         public List<FavoriteShow> FavoriteShows { get; set; }

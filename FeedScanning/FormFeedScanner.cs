@@ -41,7 +41,8 @@ namespace FeedScanning {
             refreshTimer.Interval = SCAN_INTERVAL;
             refreshTimer.Tick += refreshTimer_Tick;
             refreshTimer.Start();
-            SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;            
+            SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
+            RefreshFeed(true);
         }
 
         void NetworkChange_NetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e) {
@@ -62,7 +63,7 @@ namespace FeedScanning {
         }
 
         void refreshTimer_Tick(object sender, EventArgs e) {
-            RefreshFeed();
+            RefreshFeed(true);
         }
 
         private void RefreshFeed(bool force = false) {
@@ -113,14 +114,6 @@ namespace FeedScanning {
             } else {
                 RefreshFeed(true);
             }
-        }
-
-        protected override void OnLoad(EventArgs e) {
-            if (Program.IsTask) {
-                this.Close();
-            }
-            RefreshFeed(true);
-            base.OnLoad(e);
         }
 
         private bool allowVisible;     // ContextMenu's Show command used
