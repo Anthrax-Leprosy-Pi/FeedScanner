@@ -26,7 +26,7 @@ namespace FeedScanning {
             InitializeComponent();
             textBoxFeedUrl.Text = FeedScanner.FEED_URL;
             numericUpDownPages.Value = FeedScanner.MAX_PAGES;
-            
+
             feedScanner = new FeedScanner();
             feedScanner.RunWorkerCompleted += feedSifter_RunWorkerCompleted;
             feedScanner.ProgressChanged += feedSifter_ProgressChanged;
@@ -73,14 +73,14 @@ namespace FeedScanning {
         }
 
         void feedSifter_ProgressChanged(object sender, ProgressChangedEventArgs e) {
-            Invoke((MethodInvoker)delegate() {
+            Invoke((MethodInvoker)delegate () {
                 textBoxFeedUrl.BackColor = Color.LightGreen;
                 if (e.ProgressPercentage < 100) {
                     buttonRefreshCancel.Text = "Cancel";
                     toolStripProgressBar1.Value = e.ProgressPercentage;
                     toolStripStatusLabel1.ToolTipText = string.Empty;
                     toolStripStatusLabel1.Text = "Scanning...";
-                    notifyIcon1.ShowBalloonTip(1000, "FeedScanner", "Scanning... " + e.ProgressPercentage.ToString() + "%", ToolTipIcon.Info);
+                    //notifyIcon1.ShowBalloonTip(1000, "FeedScanner", "Scanning... " + e.ProgressPercentage.ToString() + "%", ToolTipIcon.Info);
                 } else if (e.ProgressPercentage >= 100) {
                     buttonRefreshCancel.Text = "Refresh";
                     toolStripProgressBar1.Style = ProgressBarStyle.Continuous;
@@ -92,7 +92,7 @@ namespace FeedScanning {
         }
 
         void feedSifter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
-            Invoke((MethodInvoker)delegate() {
+            Invoke((MethodInvoker)delegate () {
                 if (e.Error != null) {
                     textBoxFeedUrl.BackColor = Color.Tomato;
                     toolStripStatusLabel1.Text = e.Error.Message;
@@ -185,7 +185,7 @@ namespace FeedScanning {
         }
 
         private void fileSystemWatcher1_Changed(object sender, System.IO.FileSystemEventArgs e) {
-            Invoke((MethodInvoker)delegate() {
+            Invoke((MethodInvoker)delegate () {
                 string[] sizes = { "B", "KB", "MB", "GB" };
                 double len = new FileInfo(e.FullPath).Length;
                 int order = 0;
@@ -207,15 +207,15 @@ namespace FeedScanning {
         }
 
         private void checkBoxFavoritesOnly_CheckedChanged(object sender, EventArgs e) {
-            this.SuspendLayout();
-            CurrencyManager currencyManager1 = (CurrencyManager)BindingContext[dataGridViewFeed.DataSource];
-            currencyManager1.SuspendBinding();
-            for (int i = 0; i < dataGridViewFeed.Rows.Count; i++) {
-                FeedItem current = (FeedItem)dataGridViewFeed.Rows[i].DataBoundItem;
-                dataGridViewFeed.Rows[i].Visible = current.Favorite || checkBoxShowAll.Checked;
+            //SuspendLayout();
+            //feedItemBindingSource.SuspendBinding();
+            if (checkBoxShowAll.Checked) {
+                feedItemBindingSource.DataSource = feedScanner.FeedEntries;
+            } else {
+                feedItemBindingSource.DataSource = feedScanner.FeedEntries.Where(entry => entry.Favorite || entry.Done);
             }
-            currencyManager1.ResumeBinding();
-            this.ResumeLayout();
+            //feedItemBindingSource.ResumeBinding();
+            //ResumeLayout();
         }
     }
 }
